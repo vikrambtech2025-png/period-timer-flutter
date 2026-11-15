@@ -142,7 +142,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   .animate().fadeIn().slideY(begin: -0.2),
               const SizedBox(height: 6),
               const Text('Sign in to edit periods and schedule alarms',
-                  style: TextStyle(color: Colors.grey), textAlign: TextAlign.center),
+                  style: TextStyle(color: Colors.grey), textAlign: TextAlign.center).animate().fadeIn(delay: 100.ms),
               const SizedBox(height: 20),
               if (mode == 'login') _loginCard(),
               if (mode == 'signup') _signupCard(),
@@ -158,7 +158,7 @@ class _AuthScreenState extends State<AuthScreen> {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(padding: const EdgeInsets.all(16), child: child),
-      );
+      ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.15, curve: Curves.easeOutCubic);
 
   Widget _blackBtn(String label, String hint, VoidCallback? onPressed, bool disabled) {
     return SizedBox(
@@ -178,7 +178,7 @@ class _AuthScreenState extends State<AuthScreen> {
           ],
         ),
       ),
-    );
+    ).animate().fadeIn(duration: 500.ms).scale(begin: const Offset(0.96, 0.96));
   }
 
   Widget _input(TextEditingController c, String hint, {bool obscure = false, TextInputType? kb}) {
@@ -225,7 +225,7 @@ class _AuthScreenState extends State<AuthScreen> {
           alignment: Alignment.centerRight,
           child: TextButton(onPressed: () => setState(() => showPw = !showPw), child: Text(showPw ? 'Hide password' : 'Show password')),
         ),
-        if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center),
+        if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center).animate().shake(hz: 4, duration: 400.ms),
         if (inCooldown) Text('Locked for ${cooldownSec}s', style: const TextStyle(color: Colors.orange, fontSize: 13), textAlign: TextAlign.center),
         const SizedBox(height: 6),
         _blackBtn(busy ? 'Signing in...' : 'Log In', 'Enter your staff password', _login, busy || inCooldown),
@@ -248,7 +248,7 @@ class _AuthScreenState extends State<AuthScreen> {
           alignment: Alignment.centerRight,
           child: TextButton(onPressed: () => setState(() => showPw = !showPw), child: Text(showPw ? 'Hide password' : 'Show password')),
         ),
-        if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center),
+        if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center).animate().shake(hz: 4, duration: 400.ms),
         const SizedBox(height: 6),
         _blackBtn(busy ? 'Creating...' : 'Create Account', 'Save staff login', _signup, busy),
         if (accounts.isNotEmpty)
@@ -268,7 +268,7 @@ class _AuthScreenState extends State<AuthScreen> {
               style: TextStyle(color: Colors.grey, fontSize: 13), textAlign: TextAlign.center),
           const SizedBox(height: 12),
           _input(resetEmailCtrl, 'Email', kb: TextInputType.emailAddress),
-          if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center),
+          if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center).animate().shake(hz: 4, duration: 400.ms),
           const SizedBox(height: 6),
           _blackBtn('Continue', 'Verify account email', _resetStart, busy),
           TextButton(onPressed: () { _clearError(); setState(() => mode = 'login'); }, child: const Text('Back to login')),
@@ -285,7 +285,7 @@ class _AuthScreenState extends State<AuthScreen> {
               style: TextStyle(color: Colors.grey, fontSize: 13), textAlign: TextAlign.center),
           const SizedBox(height: 12),
           _input(resetConfirmCtrl, 'Type "RESET"'),
-          if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center),
+          if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center).animate().shake(hz: 4, duration: 400.ms),
           const SizedBox(height: 6),
           _blackBtn('Confirm', 'Proceed to new password', _resetConfirm, busy),
           TextButton(onPressed: () { _clearError(); setState(() => resetStep = 0); }, child: const Text('Back')),
@@ -303,7 +303,7 @@ class _AuthScreenState extends State<AuthScreen> {
           alignment: Alignment.centerRight,
           child: TextButton(onPressed: () => setState(() => showPw = !showPw), child: Text(showPw ? 'Hide password' : 'Show password')),
         ),
-        if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center),
+        if (error.isNotEmpty) Text(error, style: const TextStyle(color: Colors.red, fontSize: 13), textAlign: TextAlign.center).animate().shake(hz: 4, duration: 400.ms),
         const SizedBox(height: 6),
         _blackBtn(busy ? 'Saving...' : 'Save New Password', 'Update account password', _resetFinish, busy),
         TextButton(onPressed: () { _clearError(); setState(() => resetStep = 1); }, child: const Text('Back')),
