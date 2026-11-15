@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../constants.dart';
 import '../models/schedule.dart';
 import '../app_services.dart';
+import '../utils/responsive.dart';
 import 'auth_screen.dart';
 import '../widgets/time_picker.dart';
 
@@ -147,11 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() { scheduledCount = n; status = 'Scheduled $n period alarms'; saving = false; });
   }
 
-  Future<void> _requestPerms() async {
-    await alarms.requestPermission();
-    await alarms.requestExactAlarm();
-  }
-
   @override
   Widget build(BuildContext context) {
     if (!authReady) {
@@ -170,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(R.pad(context)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -215,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 10),
                         Card(
                           child: Padding(
-                            padding: const EdgeInsets.all(12),
+                            padding: EdgeInsets.all(R.pad(context)),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -264,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(R.gap(context)),
                   decoration: const BoxDecoration(color: Colors.white, boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, -2))]),
                   child: Row(
                     children: [
@@ -363,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
                         child: Padding(
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(R.pad(context)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

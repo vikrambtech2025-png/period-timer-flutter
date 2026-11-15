@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../services/auth_service.dart';
 import '../services/storage_service.dart';
+import '../utils/responsive.dart';
 
 class AuthScreen extends StatefulWidget {
   final AuthService auth;
@@ -132,7 +133,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(R.pad(context)),
           child: Column(
             children: [
               const SizedBox(height: 30),
@@ -157,7 +158,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget _card(Widget child) => Card(
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: Padding(padding: const EdgeInsets.all(16), child: child),
+        child: Padding(padding: EdgeInsets.all(R.pad(context)), child: child),
       ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.15, curve: Curves.easeOutCubic);
 
   Widget _blackBtn(String label, String hint, VoidCallback? onPressed, bool disabled) {
