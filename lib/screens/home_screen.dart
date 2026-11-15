@@ -241,8 +241,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
-                                            Text(entry.subject.isEmpty ? 'No subject' : entry.subject, style: TextStyle(fontSize: 12, color: entry.subject.isEmpty ? Colors.grey : Colors.black)),
-                                            Text(entry.faculty.isEmpty ? 'No faculty' : entry.faculty, style: TextStyle(fontSize: 11, color: entry.faculty.isEmpty ? Colors.grey : Colors.grey.shade700)),
+                                            Text(entry.subject, style: const TextStyle(fontSize: 12, color: Colors.black)),
+                                            Text(entry.faculty, style: TextStyle(fontSize: 11, color: Colors.grey.shade700)),
                                           ],
                                         ),
                                       ],
