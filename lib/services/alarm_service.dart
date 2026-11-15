@@ -22,7 +22,7 @@ class AlarmService {
     );
 
     const channel = AndroidNotificationChannel(
-      'period-alarms-v3',
+      'period-alarms-v4',
       'Period Alarms',
       description: 'Buzzer alarms for period starts',
       importance: Importance.max,
@@ -91,7 +91,7 @@ class AlarmService {
           scheduled,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              'period-alarms-v3',
+              'period-alarms-v4',
               'Period Alarms',
               channelDescription: 'Buzzer alarms for period starts',
               importance: Importance.max,
