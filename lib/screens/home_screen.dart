@@ -46,6 +46,28 @@ class _HomeScreenState extends State<HomeScreen> {
     schedule = s;
     status = 'Ready - edit periods and schedule alarms';
     if (mounted) setState(() {});
+    // Request permissions
+    await alarms.requestPermission();
+    await alarms.requestExactAlarm();
+    _checkBatteryOptimization();
+  }
+
+  Future<void> _checkBatteryOptimization() async {
+    final granted = await alarms.isExactAlarmGranted();
+    if (!granted && mounted) {
+      setState(() => status = 'Exact alarm permission not granted - alarms may be delayed');
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Alarm permission needed'),
+          content: const Text('To fire alarms on time, please allow "Alarms & reminders" permission for this app in system settings.'),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Later')),
+            TextButton(onPressed: () { Navigator.pop(context); alarms.requestExactAlarm(); }, child: const Text('Open settings')),
+          ],
+        ),
+      );
+    }
   }
 
   Schedule get currentSchedule => schedule ?? Schedule.blank();
@@ -255,6 +277,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         ).animate().fadeIn(),
                         const SizedBox(height: 8),
                         Text('Scheduled: $scheduledCount alarms', textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
+                        const SizedBox(height: 8),
+                        Center(
+                          child: TextButton(
+                            onPressed: () async {
+                              await alarms.scheduleTestAlarm();
+                              if (mounted) setState(() => status = 'Test alarm set for 1 minute from now');
+                            },
+                            child: const Text('Test alarm (1 min)', style: TextStyle(fontSize: 12)),
+                          ),
+                        ),
                       ],
                     ),
                   ),

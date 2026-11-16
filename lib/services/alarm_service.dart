@@ -47,6 +47,11 @@ class AlarmService {
     await android?.requestExactAlarmsPermission();
   }
 
+  Future<bool> isExactAlarmGranted() async {
+    final android = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    return await android?.canScheduleExactNotifications() ?? false;
+  }
+
   Future<int> scheduleAll(Schedule schedule) async {
     await init();
     await _plugin.cancelAll();
@@ -115,5 +120,31 @@ class AlarmService {
   Future<void> cancelAll() async {
     await init();
     await _plugin.cancelAll();
+  }
+
+  /// Schedule a one-shot test alarm 1 minute from now.
+  Future<void> scheduleTestAlarm() async {
+    await init();
+    final now = tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1));
+    await _plugin.zonedSchedule(
+      999999,
+      'Test Alarm',
+      'This is a test alarm. If you see this, alarms work!',
+      now,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          'period-alarms-v4',
+          'Period Alarms',
+          channelDescription: 'Buzzer alarms for period starts',
+          importance: Importance.max,
+          priority: Priority.high,
+          sound: RawResourceAndroidNotificationSound('buzzer'),
+          playSound: true,
+          enableVibration: true,
+        ),
+        iOS: const DarwinNotificationDetails(sound: 'buzzer.wav'),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
   }
 }
