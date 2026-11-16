@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../constants.dart';
 import '../models/schedule.dart';
 import '../app_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/responsive.dart';
 import 'auth_screen.dart';
 import '../widgets/time_picker.dart';
@@ -53,14 +54,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _checkBatteryOptimization() async {
-    final granted = await alarms.isExactAlarmGranted();
-    if (!granted && mounted) {
-      setState(() => status = 'Exact alarm permission not granted - alarms may be delayed');
+    // Always prompt on first launch since USE_EXACT_ALARM alone may not
+    // be sufficient for exactAllowWhileIdle on Android 14+.
+    final prefs = await SharedPreferences.getInstance();
+    final prompted = prefs.getBool('alarm_perm_prompted') ?? false;
+    if (!prompted && mounted) {
+      await prefs.setBool('alarm_perm_prompted', true);
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
           title: const Text('Alarm permission needed'),
-          content: const Text('To fire alarms on time, please allow "Alarms & reminders" permission for this app in system settings.'),
+          content: const Text('For alarms to fire on time:\\n\\n1. Tap "Open settings" and enable "Alarms & reminders" for this app.\\n2. Also disable battery optimization for this app.\\n\\nWithout these, alarms may be delayed or skipped by Android.'),
           actions: [
             TextButton(onPressed: () => Navigator.pop(context), child: const Text('Later')),
             TextButton(onPressed: () { Navigator.pop(context); alarms.requestExactAlarm(); }, child: const Text('Open settings')),
