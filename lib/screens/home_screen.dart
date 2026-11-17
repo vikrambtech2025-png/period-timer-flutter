@@ -281,16 +281,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ).animate().fadeIn(),
                         const SizedBox(height: 8),
                         Text('Scheduled: $scheduledCount alarms', textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey)),
-                        const SizedBox(height: 8),
-                        Center(
-                          child: TextButton(
-                            onPressed: () async {
-                              await alarms.scheduleTestAlarm();
-                              if (mounted) setState(() => status = 'Test alarm set for 1 minute from now');
-                            },
-                            child: const Text('Test alarm (1 min)', style: TextStyle(fontSize: 12)),
-                          ),
-                        ),
                       ],
                     ),
                   ),

@@ -89,10 +89,11 @@ class AlarmService {
         if (scheduled.isBefore(now)) {
           scheduled = scheduled.add(const Duration(days: 7));
         }
+        // Period start alarm
         await _plugin.zonedSchedule(
           (day.hashCode * 31 + pt.period) & 0x7fffffff,
           'Period ${pt.period}: $name',
-          '$day - ${subject.isEmpty ? "No subject" : subject} - ${pt.time}',
+          '$day - ${subject.isEmpty ? "" : subject} - ${pt.time}',
           scheduled,
           NotificationDetails(
             android: AndroidNotificationDetails(
@@ -112,6 +113,34 @@ class AlarmService {
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
         );
         count++;
+
+        // 5-min-before reminder notification
+        final before5 = scheduled.subtract(const Duration(minutes: 5));
+        if (before5.isAfter(tz.TZDateTime.now(tz.local))) {
+          await _plugin.zonedSchedule(
+            ((day.hashCode * 31 + pt.period) & 0x7fffffff) + 100000,
+            'Period ${pt.period}: $name',
+            'You have class in 5 min',
+            before5,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                'period-alarms-v4',
+                'Period Alarms',
+                channelDescription: 'Buzzer alarms for period starts',
+                importance: Importance.max,
+                priority: Priority.high,
+                sound: RawResourceAndroidNotificationSound('buzzer'),
+                playSound: true,
+                enableVibration: true,
+                fullScreenIntent: false,
+              ),
+              iOS: const DarwinNotificationDetails(sound: 'buzzer.wav'),
+            ),
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+          );
+          count++;
+        }
       }
     }
     return count;
@@ -122,29 +151,5 @@ class AlarmService {
     await _plugin.cancelAll();
   }
 
-  /// Schedule a one-shot test alarm 1 minute from now.
-  Future<void> scheduleTestAlarm() async {
-    await init();
-    final now = tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1));
-    await _plugin.zonedSchedule(
-      999999,
-      'Test Alarm',
-      'This is a test alarm. If you see this, alarms work!',
-      now,
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'period-alarms-v4',
-          'Period Alarms',
-          channelDescription: 'Buzzer alarms for period starts',
-          importance: Importance.max,
-          priority: Priority.high,
-          sound: RawResourceAndroidNotificationSound('buzzer'),
-          playSound: true,
-          enableVibration: true,
-        ),
-        iOS: const DarwinNotificationDetails(sound: 'buzzer.wav'),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    );
-  }
+
 }
